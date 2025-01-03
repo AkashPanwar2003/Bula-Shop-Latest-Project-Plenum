@@ -1,0 +1,52 @@
+// Define the primary color
+const primary = '#2A677A';  // Primary color
+
+// Export the colors object with various color constants
+export const colors = {
+    primary,
+    primary0: '#2A677A',
+    primary1: '#012E3D',
+    primary2: '#D5EAF1',
+    primary3: '#2A677A',
+    primary4: 'rgba(42,103,122,0.4)',
+    primary5: 'rgba(42,103,122,0.5)',
+    primary6: 'rgba(42,103,122,0.6)',
+    primary7: 'rgba(42,103,122,0.7)',
+    primary8: 'rgba(42,103,122,0.8)',
+    primary9: '#78ADBE',
+    primaryBG: '#012E3C',
+    secondary: '#F6B100',
+    sun: '#F0A949',
+    primaryCompliment: '#B0421E',
+    headerText: 'white',
+    withPrimary: 'white',
+
+    underlayColor: 'rgb(235,235,235)',
+    black: 'black',
+    white: 'white',
+    grey: '#EFECEC',
+    link: 'rgb(51,138,93)',
+
+    yellow: '#FEF1D1',
+    yellow1: '#FDE3A1',
+    yellow2: '#FCD576',
+    yellow3: '#FBC748',
+    yellow4: '#FAB91A',
+
+    statusBar: primary,
+    statusBarIOS: 'light-content',
+    headerBackground: primary,
+    backgroundColor: 'rgb(255,255,255)',
+    backgroundColor2: 'rgb(245,245,245)',
+    danger: 'red',
+    error: 'red',
+    info: primary,
+    success: '#4BB543',
+    warning: '#8a5d33',
+    heart: 'rgb(204,61,92)',
+    expenses: '#EA5455',
+    sales: '#2BC871',
+    paidPurchaseBackground: '#DFF6E9',
+    purchaseBackground: '#FBE2E2',
+    disabledText: 'rgba(50,50,50,0.4)',
+};
