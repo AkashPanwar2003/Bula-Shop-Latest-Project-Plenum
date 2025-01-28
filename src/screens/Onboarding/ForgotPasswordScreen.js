@@ -14,9 +14,9 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
-import { colors } from '../../constant/colors';
+import { colors } from '../../constants/colors';
 import CustomInput from '../../components/Input';
-import { images } from '../../constant/images';
+import { images } from '../../constants/images';
 const { width, height } = Dimensions.get('window');
 
 

@@ -1,7 +1,7 @@
 import { Platform, StyleSheet, Text, View, Image, Easing, Animated } from 'react-native';
 import React, { useRef } from 'react';
-import { colors } from '../constant/colors'
-import { windowHeight, normalizeFont, windowWidth } from '../constant/helper';
+import { colors } from '../constants/colors'
+import { windowHeight, normalizeFont, windowWidth } from '../constants/helper';
 
 
 const DashboardBox = ({ keyValue, value, imagePath, size }) => {

@@ -17,20 +17,20 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImagePickerComponent from '../../components/ImagePicker';
-import { colors } from '../../constant/colors';
+import { colors } from '../../constants/colors';
 import CustomInput from '../../components/Input';
-
+import EnhancedPhoneInput from '../../components/PhoneInput';
 // Validation Schema
 const signupSchema = Yup.object().shape({
     name: Yup.string()
         .min(2, 'Name must be at least 2 characters')
         .required('Name is required'),
-    email: Yup.string()
-        .email('Enter a valid email')
-        .required('Email is required'),
     phoneNumber: Yup.string()
-        .matches(/^[0-9]{10,14}$/, 'Enter a valid phone number')
-        .required('Phone number is required'),
+        .required('Phone number is required')
+        // .matches(/^[0-9]+$/, 'Phone number must contain only digits')
+        .min(10, 'Phone number must be at least 10 digits')
+        .max(14, 'Phone number must not exceed 14 digits'),
+
     password: Yup.string()
         .min(6, 'Password must be at least 6 characters')
         .required('Password is required'),
@@ -69,6 +69,7 @@ const SignupScreen = ({ navigation }) => {
         const formData = { ...data, image };
 
         console.log('Signup Data:', formData);
+        navigation.navigate('MPin')
         // Handle signup logic here (e.g., send data to the server)
     };
     const handleImageSelection = (uri) => {
@@ -104,12 +105,17 @@ const SignupScreen = ({ navigation }) => {
             />
 
             {/* Phone Number Input */}
-            <CustomInput
-                name="phoneNumber"
+            <Controller
                 control={control}
-                label="Phone Number"
-                keyboardType="phone-pad"
-                style={styles.input}
+                name="phoneNumber"
+                render={({ field: { onChange, value } }) => (
+                    <EnhancedPhoneInput
+                        value={value}
+                        onChangeText={onChange}
+                        error={errors.phoneNumber?.message}
+                        placeholder="Enter your phone number"
+                    />
+                )}
             />
 
             {/* Password Input */}

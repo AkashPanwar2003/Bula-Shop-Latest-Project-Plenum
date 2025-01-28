@@ -12,12 +12,12 @@ import {
 } from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { colors } from '../../constant/colors';
-import sizes from '../../constant/sizes';
-import { normalizeFont, windowWidth } from '../../constant/helper';
-import { windowHeight } from '../../constant/helper';
+import { colors } from '../../constants/colors';
+import sizes from '../../constants/sizes';
+import { normalizeFont, windowWidth } from '../../constants/helper';
+import { windowHeight } from '../../constants/helper';
 import DashboardBox from '../../components/DashBoardBox';
-import { images } from '../../constant/images';
+import { images } from '../../constants/images';
 
 
 LogBox.ignoreLogs(['new NativeEventEmitter']);

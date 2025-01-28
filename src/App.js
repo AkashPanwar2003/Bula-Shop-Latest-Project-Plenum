@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -8,7 +9,6 @@ import BootSplash from "react-native-bootsplash";
 import AppNavigator from './navigator/AppNavigator';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
-import { SafeAreaView } from 'react-native-safe-area-context';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -24,15 +24,17 @@ const App = () => {
   }, []);
   return (
     <GestureHandlerRootView style={styles.flex1}>
-      <Provider store={store}>
-        <NavigationContainer>
-          <SafeAreaProvider>
+      <PaperProvider>
+        <Provider store={store}>
+          <NavigationContainer>
+            <SafeAreaProvider>
 
-            <AppNavigator />
-          </SafeAreaProvider>
-        </NavigationContainer>
+              <AppNavigator />
+            </SafeAreaProvider>
+          </NavigationContainer>
 
-      </Provider>
+        </Provider>
+      </PaperProvider>
     </GestureHandlerRootView>
   );
 }

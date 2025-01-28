@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { images } from '../../constant/images';
+import { images } from '../../constants/images';
 
 // Define screen dimensions
 const { width, height } = Dimensions.get('window');

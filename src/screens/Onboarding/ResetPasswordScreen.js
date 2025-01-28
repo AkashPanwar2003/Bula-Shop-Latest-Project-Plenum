@@ -15,9 +15,9 @@ import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import ImagePickerComponent from '../../components/ImagePicker';
-import { colors } from '../../constant/colors';
+import { colors } from '../../constants/colors';
 import CustomInput from '../../components/Input';
-import { images } from '../../constant/images';
+import { images } from '../../constants/images';
 const { width, height } = Dimensions.get('window');
 // Validation Schema
 const resetSchema = Yup.object().shape({

@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { colors } from '../constant/colors';
+import { colors } from '../constants/colors';
 
 const { width } = Dimensions.get('window');
 

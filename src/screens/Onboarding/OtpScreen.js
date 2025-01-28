@@ -4,9 +4,9 @@ import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import OtpInputs from 'react-native-otp-inputs';
-import { colors } from '../../constant/colors';
+import { colors } from '../../constants/colors';
 import { Button } from 'react-native-paper';
-import { images } from '../../constant/images';
+import { images } from '../../constants/images';
 const { width, height } = Dimensions.get('window');
 
 const validationSchema = Yup.object().shape({

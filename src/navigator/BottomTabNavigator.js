@@ -1,23 +1,24 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { StyleSheet, Dimensions } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { colors } from '../constant/colors';
-import MaterialCommunity from 'react-native-vector-icons/Ionicons';
-import HomeScreen from '../screens/Home/HomeScreen';
-import HomeScreen1 from '../screens/Home/HomeScreen1';
-import HomeScreen2 from '../screens/Home/HomeScreen2';
-import HomeScreen3 from '../screens/Home/HomeScreen3';
-const Tab = createMaterialBottomTabNavigator();
+import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
+import DashboardScreen from '../screens/Home/DashboardScreen';
+import CustomersProductListScreen from '../screens/Home/CustomersProductListScreen';
+import StockInventoryScreen from '../screens/Home/StockInventoryScreen';
+import CustomersOrderListingScreen from '../screens/Home/CustomersOrderListingScreen';
+import SupplierDashboardScreen from '../screens/Home/SupplierDashboardScreen'
+import { colors } from '../constants/colors';
+const { windowWidth, windowHeight } = Dimensions.get('window');
 
-const BottomTabNavigator = () => {
+const Tab = createMaterialBottomTabNavigator();
+function MainNavigator() {
+
     return (
         <Tab.Navigator
-            // initialRouteName="Home"
             shifting={false}
             compact
-            // labeled={false}
-            activeColor={colors.primary}
-            inactiveColor={colors.black}
+            activeColor={colors.primary0}
+            inactiveColor={colors.primary1}
             barStyle={styles.bar}
             screenOptions={{
                 tabBarActiveTintColor: 'blue',
@@ -25,50 +26,58 @@ const BottomTabNavigator = () => {
             }}>
             <Tab.Screen
                 options={{
-                    tabBarLabel: 'DashBoard',
+                    tabBarLabel: 'Home',
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunity name="home" color={color} size={26} />
                     ),
                 }}
-                name="HomeScreen"
-                component={HomeScreen}
+                name="DashboardScreen"
+                component={DashboardScreen}
             />
             <Tab.Screen
                 options={{
-                    tabBarColor: 'red',
-                    tabBarLabel: 'Products',
+                    tabBarLabel: 'Product',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunity name="cart" color={color} size={26} />
+                        <MaterialCommunity name="grid" color={color} size={26} />
                     ),
                 }}
-                name="HomeScreen1"
-                component={HomeScreen1}
+                name="Product"
+                component={CustomersProductListScreen}
+            />
+            <Tab.Screen
+                options={{
+                    tabBarLabel: 'Stock',
+                    tabBarIcon: ({ color }) => (
+                        <MaterialCommunity name='bag-checked' color={color} size={26} />
+                    ),
+                }}
+                name="Stock"
+                component={StockInventoryScreen}
+            />
+            <Tab.Screen
+                options={{
+                    tabBarLabel: 'Orders',
+                    tabBarIcon: ({ color }) => (
+                        <MaterialCommunity name="cart-arrow-down" color={color} size={26} />
+                    ),
+                }}
+                name="Orders"
+                component={CustomersOrderListingScreen}
             />
             <Tab.Screen
                 options={{
                     tabBarLabel: 'Suppliers',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunity name="people-outline" color={color} size={26} />
+                        <MaterialCommunity name="account-supervisor-circle" color={color} size={26} />
                     ),
                 }}
-                name="HomeScreen2"
-                component={HomeScreen2}
-            />
-            <Tab.Screen
-                options={{
-                    tabBarLabel: 'Profile',
-                    tabBarIcon: ({ color }) => (
-                        <MaterialCommunity name="person-outline" color={color} size={26} />
-                    ),
-                }}
-                name="HomeScreen3"
-                component={HomeScreen3}
+                name="Suppliers"
+                component={SupplierDashboardScreen}
             />
         </Tab.Navigator>
-    )
+    );
 }
-
-export default BottomTabNavigator;
+export default MainNavigator
 
 const styles = StyleSheet.create({
     bar: {
@@ -80,6 +89,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 5,
         elevation: 5,
-        backgroundColor: colors.white,
+        backgroundColor: '#ffffff',
     },
 });

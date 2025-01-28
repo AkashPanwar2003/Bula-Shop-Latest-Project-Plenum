@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
     View,
     StyleSheet,
@@ -19,20 +19,20 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../features/auth/authSlice';
 import Loading from '../../components/Loading';
-import { colors } from '../../constant/colors';
-import CustomInput from '../../components/Input';
-import { images } from '../../constant/images';
+import { colors } from '../../constants/colors';
+import EnhancedPhoneInput from '../../components/PhoneInput';
+import { images } from '../../constants/images';
 const { width, height } = Dimensions.get('window');
 
 
 // Validation Schema
 const loginSchema = Yup.object().shape({
     phoneNumber: Yup.string()
-        .matches(/^[0-9]{10,14}$/, 'Enter a valid phone number')
-        .required('Phone number is required'),
-    password: Yup.string()
-        .min(6, 'Password must be at least 6 characters')
-        .required('Password is required'),
+        .required('Phone number is required')
+        // .matches(/^[0-9]+$/, 'Phone number must contain only digits')
+        .min(10, 'Phone number must be at least 10 digits')
+        .max(14, 'Phone number must not exceed 14 digits')
+
 });
 
 const LoginScreen = ({ navigation }) => {
@@ -46,7 +46,6 @@ const LoginScreen = ({ navigation }) => {
         resolver: yupResolver(loginSchema),
         defaultValues: {
             phoneNumber: '',
-            password: '',
         },
     });
 
@@ -62,23 +61,18 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.title}>Login</Text>
 
             {/* Phone Number Input */}
-            <CustomInput
+            <Controller
+                control={control}
                 name="phoneNumber"
-                control={control}
-                label="Phone Number"
-                keyboardType="phone-pad"
-                style={styles.input}
+                render={({ field: { onChange, value } }) => (
+                    <EnhancedPhoneInput
+                        value={value}
+                        onChangeText={onChange}
+                        error={errors.phoneNumber?.message}
+                        placeholder="Enter your phone number"
+                    />
+                )}
             />
-
-            {/* Password Input */}
-            <CustomInput
-                name="password"
-                control={control}
-                label="Password"
-                secureTextEntry
-                style={styles.input}
-            />
-
             {/* Login Button */}
             <Button
                 mode="contained"
@@ -140,6 +134,16 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: colors.primary1,
         textAlign: 'center',
+    },
+    phoneContainer: {
+        width: '100%',
+        height: 60,
+        // marginBottom: 15,
+        borderColor: colors.primary,
+        borderWidth: 2
+    },
+    phoneTextContainer: {
+        paddingVertical: 10,
     },
 });
 

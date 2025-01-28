@@ -7,6 +7,7 @@ import SignupScreen from '../screens/Onboarding/SignUpScreen';
 import ForgotPasswordScreen from '../screens/Onboarding/ForgotPasswordScreen';
 import OtpScreen from '../screens/Onboarding/OtpScreen';
 import ResetPasswordScreen from '../screens/Onboarding/ResetPasswordScreen';
+import MPINScreen from '../screens/Onboarding/MpinScreen';
 const Stack = createNativeStackNavigator();
 
 const OnboardingNavigator = () => {
@@ -16,6 +17,7 @@ const OnboardingNavigator = () => {
             <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             <Stack.Screen name="SignUp" component={SignupScreen} options={{ headerShown: false }} />
             <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="MPin" component={MPINScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Otp" component={OtpScreen} options={{ headerShown: false }} />
             <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }} />
         </Stack.Navigator>

@@ -1,20 +1,36 @@
-import { View, Text } from 'react-native'
-import React, { useEffect } from 'react'
+import { View, Text, Dimensions } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+
 import MainNavigator from './MainNavigator'
 import OnboardingNavigator from './OnboardingNavigator'
 import { useSelector, useDispatch } from 'react-redux'
-import { colors } from '../constant/colors'
+import { colors } from '../constants/colors'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loadAuthFromStorage, setLoading } from '../features/auth/authSlice'
+import CustomHeader from '../components/CustomHeader'
 import Loading from '../components/Loading'
-import BottomTabNavigator from './BottomTabNavigator'
 const Stack = createNativeStackNavigator()
-
+const { windowWidth, windowHeight } = Dimensions.get('window');
 const AppNavigator = () => {
     const dispatch = useDispatch();
     const { isAuthenticated, loading } = useSelector((state) => state.auth);
+    const [text, setText] = useState('');
+    const profileData = 'Gest User'
+    useEffect(() => {
+        const today = new Date();
+        const curHr = today.getHours();
 
+        if (curHr < 12) {
+            setText('Good morning');
+        } else if (curHr < 18) {
+            setText('Good afternoon');
+        } else {
+            setText('Good evening');
+        }
+
+
+    }, []);
     useEffect(() => {
         const loadAuth = async () => {
             try {
@@ -54,8 +70,29 @@ const AppNavigator = () => {
                 <Stack.Screen name="Onboarding" component={OnboardingNavigator} />
             ) : (
                 <>
-                    <Stack.Screen name="BottomTab" component={BottomTabNavigator} />
-                    <Stack.Screen name="MainNavigator" component={MainNavigator} />
+
+                    <Stack.Screen
+                        options={({ navigation }) => ({
+                            headerBackTitleVisible: false,
+                            headerStyle: {
+                                backgroundColor: colors.primary,
+                                height: windowHeight * 1 / 10,
+                            },
+                            headerTitle: () => (
+                                <CustomHeader
+                                    navigation={navigation}
+                                    profileData={profileData}
+                                    text={text}
+                                />
+                            ),
+                            headerTitleAlign: 'left',
+                            headerLeft: () => null,
+                        })}
+                        name="MainNavigator"
+                        component={MainNavigator}
+                    />
+
+
                 </>
             )}
         </Stack.Navigator>

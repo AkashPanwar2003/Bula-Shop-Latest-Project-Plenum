@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TextInput, HelperText } from 'react-native-paper';
 import { Controller } from 'react-hook-form';
-import { colors } from '../constant/colors';
+import { colors } from '../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 const CustomInput = ({
     name,
