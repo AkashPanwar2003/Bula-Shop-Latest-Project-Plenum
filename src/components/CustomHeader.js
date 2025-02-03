@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';  // Using built-in RN icons
+import Ionicons from 'react-native-vector-icons/Ionicons';  // Using built-in RN icons
 import { fontFamily } from '../constants/customFonts';
 
 const windowHeight = Dimensions.get('window').height;
@@ -20,6 +21,12 @@ const CustomHeader = ({ navigation, profileData, text }) => {
 
             {/* Right side - Profile pic and notification */}
             <View style={styles.rightContainer}>
+                <TouchableOpacity
+                    style={styles.notificationButton}
+                    onPress={() => navigation.navigate('CalculatorScreen')}
+                >
+                    <Ionicons name="calculator" size={24} color="white" />
+                </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.notificationButton}
                     onPress={() => navigation.navigate('NotificationsListScreen')}

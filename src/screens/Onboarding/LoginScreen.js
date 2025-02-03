@@ -22,16 +22,20 @@ import Loading from '../../components/Loading';
 import { colors } from '../../constants/colors';
 import EnhancedPhoneInput from '../../components/PhoneInput';
 import { images } from '../../constants/images';
+import CustomInput from '../../components/Input';
 const { width, height } = Dimensions.get('window');
 
 
 // Validation Schema
 const loginSchema = Yup.object().shape({
-    phoneNumber: Yup.string()
+    mobile_number: Yup.string()
         .required('Phone number is required')
         // .matches(/^[0-9]+$/, 'Phone number must contain only digits')
         .min(10, 'Phone number must be at least 10 digits')
-        .max(14, 'Phone number must not exceed 14 digits')
+        .max(14, 'Phone number must not exceed 14 digits'),
+    password: Yup.string()
+        .min(6, 'Password must be at least 6 characters')
+        .required('Password is required'),
 
 });
 
@@ -45,7 +49,8 @@ const LoginScreen = ({ navigation }) => {
     } = useForm({
         resolver: yupResolver(loginSchema),
         defaultValues: {
-            phoneNumber: '',
+            mobile_number: '',
+            password: '',
         },
     });
 
@@ -63,15 +68,24 @@ const LoginScreen = ({ navigation }) => {
             {/* Phone Number Input */}
             <Controller
                 control={control}
-                name="phoneNumber"
+                name="mobile_number"
                 render={({ field: { onChange, value } }) => (
                     <EnhancedPhoneInput
                         value={value}
+
                         onChangeText={onChange}
-                        error={errors.phoneNumber?.message}
+                        error={errors.mobile_number?.message}
                         placeholder="Enter your phone number"
                     />
                 )}
+            />
+            <CustomInput
+                name="password"
+                maxLength={16}
+                control={control}
+                label="Password"
+                secureTextEntry
+                style={styles.input}
             />
             {/* Login Button */}
             <Button
@@ -88,7 +102,7 @@ const LoginScreen = ({ navigation }) => {
                 <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                 <Text style={styles.forgotPasswordText}>Don't you have an account? Sign Up</Text>
             </TouchableOpacity>
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
     View,
     StyleSheet,
@@ -15,22 +16,19 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import ImagePicker from 'react-native-image-crop-picker';
 import ImagePickerComponent from '../../components/ImagePicker';
 import { colors } from '../../constants/colors';
 import CustomInput from '../../components/Input';
-import EnhancedPhoneInput from '../../components/PhoneInput';
+import { getItemFromStorage } from '../../constants/helper';
+import { login } from '../../features/auth/authSlice';
 // Validation Schema
-const signupSchema = Yup.object().shape({
+const profile_schema = Yup.object().shape({
     name: Yup.string()
         .min(2, 'Name must be at least 2 characters')
         .required('Name is required'),
-    phoneNumber: Yup.string()
-        .required('Phone number is required')
-        // .matches(/^[0-9]+$/, 'Phone number must contain only digits')
-        .min(10, 'Phone number must be at least 10 digits')
-        .max(14, 'Phone number must not exceed 14 digits'),
-
+    shop_name: Yup.string()
+        .min(2, 'Shop Name must be at least 2 characters')
+        .required('Shop Name is required'),
     password: Yup.string()
         .min(6, 'Password must be at least 6 characters')
         .required('Password is required'),
@@ -39,46 +37,50 @@ const signupSchema = Yup.object().shape({
         .required('Confirm password is required'),
 });
 
-const SignupScreen = ({ navigation }) => {
+const ProfileScreen = ({ navigation }) => {
     const [image, setImage] = useState(null);
+    const dispatch = useDispatch()
 
     const {
         control,
         handleSubmit,
         formState: { errors },
     } = useForm({
-        resolver: yupResolver(signupSchema),
+        resolver: yupResolver(profile_schema),
         defaultValues: {
             name: '',
             email: '',
-            phoneNumber: '',
+            shop_name: '',
             password: '',
-            confirmPassword: '',
         },
     });
 
-    const handleSignup = (data) => {
+    const handleCreateProfile = async (data) => {
         if (!image) {
-            // Display alert if no image is selected
-            console.log('Please select an image');
-            Alert.alert('Profile Image Required',
-                'Please select a profile image to continue.',);
+            Alert.alert('Profile Image Required', 'Please select a profile image to continue.');
             return;
         }
+
+        // Fetch stored values
+        const mpin = await getItemFromStorage('mpin');
+        const mobile_number = await getItemFromStorage('mobile_number');
+
         // Merge image with form data
-        const formData = { ...data, image };
+        const formData = { ...data, image, mpin, mobile_number };
 
         console.log('Signup Data:', formData);
-        navigation.navigate('MPin')
+        dispatch(login({ user: data }))
+
         // Handle signup logic here (e.g., send data to the server)
     };
+
     const handleImageSelection = (uri) => {
         setImage(uri);
     };
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>Sign Up</Text>
+            <Text style={styles.title}>Profile</Text>
 
 
             <ImagePickerComponent
@@ -91,7 +93,8 @@ const SignupScreen = ({ navigation }) => {
             <CustomInput
                 name="name"
                 control={control}
-                label="Name"
+                label="Full Name"
+                maxLength={20}
                 style={styles.input}
             />
 
@@ -99,23 +102,16 @@ const SignupScreen = ({ navigation }) => {
             <CustomInput
                 name="email"
                 control={control}
-                label="Email"
+                label="Email (Optional)"
                 keyboardType="email-address"
                 style={styles.input}
             />
-
-            {/* Phone Number Input */}
-            <Controller
+            <CustomInput
+                name="shop_name"
                 control={control}
-                name="phoneNumber"
-                render={({ field: { onChange, value } }) => (
-                    <EnhancedPhoneInput
-                        value={value}
-                        onChangeText={onChange}
-                        error={errors.phoneNumber?.message}
-                        placeholder="Enter your phone number"
-                    />
-                )}
+                label="Shop Name"
+                maxLength={20}
+                style={styles.input}
             />
 
             {/* Password Input */}
@@ -123,6 +119,7 @@ const SignupScreen = ({ navigation }) => {
                 name="password"
                 control={control}
                 label="Password"
+                maxLength={16}
                 secureTextEntry
                 style={styles.input}
             />
@@ -132,6 +129,7 @@ const SignupScreen = ({ navigation }) => {
                 name="confirmPassword"
                 control={control}
                 label="Confirm Password"
+                maxLength={16}
                 secureTextEntry
                 style={styles.input}
             />
@@ -139,17 +137,13 @@ const SignupScreen = ({ navigation }) => {
             {/* Signup Button */}
             <Button
                 mode="contained"
-                onPress={handleSubmit(handleSignup)}
+                onPress={handleSubmit(handleCreateProfile)}
                 style={styles.signupButton}
                 contentStyle={styles.signupButtonContent}
             >
-                Sign Up
+                GET STARTED NOW
             </Button>
 
-            {/* Redirect to Login */}
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.loginRedirectText}>Already have an account? Login</Text>
-            </TouchableOpacity>
         </ScrollView>
     );
 };
@@ -201,4 +195,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SignupScreen;
+export default ProfileScreen;

@@ -1,67 +1,90 @@
-import React from 'react';
-import { View, StyleSheet, Text, Dimensions } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
-import { useForm, Controller } from 'react-hook-form';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { colors } from '../../constants/colors';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { setItemToStorage } from '../../constants/helper';
+const MPinScreen = ({ navigation }) => {
+    const [pin, setPin] = useState('');
 
-const { width } = Dimensions.get('window');
+    const handleKeyPress = (value) => {
+        if (pin.length < 4) {
+            setPin(prev => prev + value);
+        }
+    };
 
-// MPIN validation schema
-const mpinSchema = Yup.object().shape({
-    mpin: Yup.string()
-        .required('MPIN is required')
-        .matches(/^[0-9]+$/, 'MPIN must contain only digits')
-        .length(4, 'MPIN must be exactly 4 digits'),
-});
+    const handleBackspace = () => {
+        setPin(prev => prev.slice(0, -1));
+    };
 
-const MPINScreen = ({ navigation }) => {
-    const { control, handleSubmit, formState: { errors } } = useForm({
-        resolver: yupResolver(mpinSchema),
-        defaultValues: {
-            mpin: '',
-        },
-    });
-
-    const onSubmit = (data) => {
-        console.log('MPIN Entered:', data.mpin);
-        navigation.navigate('Home'); // Navigate after successful entry
+    const handleSubmit = async () => {
+        if (pin.length === 4) {
+            await setItemToStorage('mpin', pin); // Save MPIN to AsyncStorage
+            console.log('MPIN Saved:', pin);
+            navigation.navigate('Profile');
+        } else {
+            Alert.alert('Incomplete PIN', 'Please enter a 4-digit MPIN');
+        }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Enter Your MPIN</Text>
+            <Text style={styles.title}>Enter Your PIN</Text>
 
-            {/* MPIN Input */}
-            <Controller
-                control={control}
-                name="mpin"
-                render={({ field: { onChange, value } }) => (
-                    <TextInput
-                        value={value}
-                        onChangeText={onChange}
-                        mode="outlined"
-                        label="MPIN"
-                        keyboardType="numeric"
-                        secureTextEntry
-                        maxLength={4}
-                        style={styles.input}
-                        error={!!errors.mpin}
+            {/* PIN Indicator */}
+            <View style={styles.dotsContainer}>
+                {[0, 1, 2, 3].map((_, index) => (
+                    <View
+                        key={index}
+                        style={[
+                            styles.dot,
+                            { backgroundColor: index < pin.length ? '#ffffff' : '#4f6d7a' }
+                        ]}
                     />
-                )}
-            />
-            {errors.mpin && <Text style={styles.errorText}>{errors.mpin.message}</Text>}
+                ))}
+            </View>
 
-            {/* Submit Button */}
-            <Button
-                mode="contained"
-                onPress={handleSubmit(onSubmit)}
-                style={styles.submitButton}
-                contentStyle={styles.submitButtonContent}
-            >
-                Submit
-            </Button>
+            {/* Number Pad */}
+            <View style={styles.numberPadContainer}>
+                {/* First Row */}
+                <View style={styles.row}>
+                    {[1, 2, 3].map((num) => (
+                        <TouchableOpacity key={num} style={styles.numberKey} onPress={() => handleKeyPress(num.toString())}>
+                            <Text style={styles.numberText}>{num}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+
+                {/* Second Row */}
+                <View style={styles.row}>
+                    {[4, 5, 6].map((num) => (
+                        <TouchableOpacity key={num} style={styles.numberKey} onPress={() => handleKeyPress(num.toString())}>
+                            <Text style={styles.numberText}>{num}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+
+                {/* Third Row */}
+                <View style={styles.row}>
+                    {[7, 8, 9].map((num) => (
+                        <TouchableOpacity key={num} style={styles.numberKey} onPress={() => handleKeyPress(num.toString())}>
+                            <Text style={styles.numberText}>{num}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+
+                {/* Fourth Row */}
+                <View style={styles.row}>
+                    <TouchableOpacity style={styles.numberKey} onPress={handleBackspace}>
+                        <Text style={styles.backspaceText}>{'⌫'}</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.numberKey} onPress={() => handleKeyPress('0')}>
+                        <Text style={styles.numberText}>0</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.submitKey} onPress={handleSubmit}>
+                        <Text style={styles.submitText}>✔</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </View>
     );
 };
@@ -69,37 +92,71 @@ const MPINScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        backgroundColor: '#204051',
+        alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#ffffff',
+        paddingHorizontal: 20,
     },
     title: {
+        color: '#ffffff',
         fontSize: 24,
         fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-        color: '#333',
+        marginBottom: 40,
     },
-    input: {
-        fontSize: 20,
-        textAlign: 'center',
-        letterSpacing: 10,
-        color: colors.primary1,
+    dotsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 30,
     },
-    submitButton: {
-        marginTop: 20,
-        backgroundColor: colors.primary1,
+    dot: {
+        width: 16,
+        height: 16,
+        marginHorizontal: 8,
         borderRadius: 8,
+        backgroundColor: '#4f6d7a',
     },
-    submitButtonContent: {
-        paddingVertical: 10,
+    numberPadContainer: {
+        alignItems: 'center',
     },
-    errorText: {
-        color: 'red',
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 5,
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    numberKey: {
+        width: 80,
+        height: 80,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 10,
+        backgroundColor: '#3b6978',
+        borderRadius: 40,
+        elevation: 5,
+    },
+    numberText: {
+        color: '#ffffff',
+        fontSize: 28,
+        fontWeight: 'bold',
+    },
+    backspaceText: {
+        color: '#ffffff',
+        fontSize: 26,
+        fontWeight: 'bold',
+    },
+    submitKey: {
+        width: 80,
+        height: 80,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 10,
+        backgroundColor: '#84a9ac',
+        borderRadius: 40,
+        elevation: 5,
+    },
+    submitText: {
+        color: '#ffffff',
+        fontSize: 28,
+        fontWeight: 'bold',
     },
 });
 
-export default MPINScreen;
+export default MPinScreen;

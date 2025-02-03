@@ -9,22 +9,25 @@ import {
 import {
     Button,
 } from 'react-native-paper';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
 import { colors } from '../../constants/colors';
-import CustomInput from '../../components/Input';
+import EnhancedPhoneInput from '../../components/PhoneInput';
 import { images } from '../../constants/images';
 const { width, height } = Dimensions.get('window');
-
+import Icon from 'react-native-vector-icons/Ionicons';
+import { setItemToStorage } from '../../constants/helper';
 
 // Validation Schema
 const forgotPasswordSchema = Yup.object().shape({
-    email: Yup.string()
-        .email('Enter a valid email')
-        .required('Email is required'),
+    mobile_number: Yup.string()
+        .required('Phone number is required')
+        // .matches(/^[0-9]+$/, 'Phone number must contain only digits')
+        .min(10, 'Phone number must be at least 10 digits')
+        .max(14, 'Phone number must not exceed 14 digits'),
 });
 
 const ForgotPasswordScreen = ({ navigation }) => {
@@ -36,12 +39,17 @@ const ForgotPasswordScreen = ({ navigation }) => {
     } = useForm({
         resolver: yupResolver(forgotPasswordSchema),
         defaultValues: {
-            email: ''
+            mobile_number: ''
         },
     });
 
-    const handleForgot = (data) => {
-        navigation.navigate('Otp')
+    const handleForgot = async (data) => {
+        if (data) {
+            await setItemToStorage('mobile_number', data.mobile_number);
+            navigation.navigate('Otp', { screen_name: 'forgot_password' })
+            console.log('Login Data:', data);
+        }
+
     };
 
     return (
@@ -51,12 +59,18 @@ const ForgotPasswordScreen = ({ navigation }) => {
             <Text style={styles.title}>Forgot Password</Text>
 
             {/* Phone Number Input */}
-            <CustomInput
-                name="email"
+            <Controller
                 control={control}
-                label="Email"
-                keyboardType="email-address"
-                style={styles.input}
+                name="mobile_number"
+                render={({ field: { onChange, value } }) => (
+                    <EnhancedPhoneInput
+                        value={value}
+
+                        onChangeText={onChange}
+                        error={errors.mobile_number?.message}
+                        placeholder="Enter your phone number"
+                    />
+                )}
             />
             {/* Login Button */}
             <Button
@@ -64,10 +78,18 @@ const ForgotPasswordScreen = ({ navigation }) => {
                 onPress={handleSubmit(handleForgot)}
                 style={styles.loginButton}
                 contentStyle={styles.loginButtonContent}
-                disabled={loading}
+            // disabled={loading}
             >
-                {loading ? (<Loading size='small' color={"#ffffff"} />) : 'Submit'}
+                {loading ? (
+                    <Loading size="small" color="#ffffff" />
+                ) : (
+                    <View style={styles.buttonContent}>
+                        <Icon name="chatbubble-ellipses-outline" size={20} color="#ffffff" style={styles.icon} />
+                        <Text style={styles.buttonText}>Send OTP via SMS</Text>
+                    </View>
+                )}
             </Button>
+
 
         </View>
     );
@@ -102,7 +124,22 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     loginButtonContent: {
-        paddingVertical: 10,
+        paddingVertical: 12,
+        alignContent: 'center',
+        justifyContent: 'center',
+    },
+    buttonContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    icon: {
+        marginRight: 10, // Space between icon and text
+    },
+    buttonText: {
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: '600',
     },
     forgotPasswordText: {
         marginTop: 20,

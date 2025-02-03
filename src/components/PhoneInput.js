@@ -3,19 +3,23 @@ import {
     View,
     Text,
     StyleSheet,
-    Dimensions
+    Dimensions,
+    LogBox
 } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import { colors } from '../constants/colors';
+import { HelperText } from 'react-native-paper';
 
 const { width } = Dimensions.get('window');
 
+LogBox.ignoreLogs(["Support for defaultProps will be removed"]);
+
 const EnhancedPhoneInput = ({
-    value,
+    value = '',
     onChangeText,
-    error,
-    placeholder,
-    defaultCode = "IN",
+    error = '',
+    placeholder = 'Enter phone number',
+    defaultCode = 'IN',
     ...props
 }) => {
     const [isFocused, setIsFocused] = useState(false);
@@ -41,7 +45,7 @@ const EnhancedPhoneInput = ({
                     flagButtonStyle={styles.flagButton}
                     textInputStyle={styles.phoneInput}
                     textInputProps={{
-                        placeholder: placeholder || 'Enter phone number',
+                        placeholder: placeholder,
                         placeholderTextColor: colors.primary1,
                     }}
                     withShadow={false}
@@ -53,9 +57,9 @@ const EnhancedPhoneInput = ({
                 />
             </View>
             {error && (
-                <Text style={styles.errorText}>
+                <HelperText type="error" visible>
                     {error}
-                </Text>
+                </HelperText>
             )}
         </View>
     );

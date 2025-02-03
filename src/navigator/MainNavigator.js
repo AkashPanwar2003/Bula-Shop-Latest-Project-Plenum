@@ -7,6 +7,7 @@ import { colors } from '../constants/colors'
 import CustomHeader from '../components/CustomHeader'
 import ProfileScreen from '../screens/Home/CustomersOrderListingScreen'
 import ProductAddEditScreen from '../screens/Home/ProductAddEditScreen'
+import CalculatorScreen from '../screens/Home/CalculaterScreen'
 const { windowWidth, windowHeight } = Dimensions.get('window');
 
 const Stack = createNativeStackNavigator()
@@ -28,7 +29,7 @@ const MainNavigator = () => {
 
     }, []);
     return (
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="Home">
             <Stack.Screen options={({ navigation }) => ({
                 headerBackTitleVisible: false,
                 headerStyle: {
@@ -63,6 +64,19 @@ const MainNavigator = () => {
                 component={ProductAddEditScreen}
                 options={{
                     headerTitle: 'Add Product', // Customize the title
+                    headerRight: () => (
+                        <Button
+                            onPress={() => alert('Settings Pressed')}
+                            title="Settings"
+                        />
+                    ),
+                }}
+            />
+            <Stack.Screen
+                name="CalculatorScreen"
+                component={CalculatorScreen}
+                options={{
+                    headerTitle: 'Calculator', // Customize the title
                     headerRight: () => (
                         <Button
                             onPress={() => alert('Settings Pressed')}

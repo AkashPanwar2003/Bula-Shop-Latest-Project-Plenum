@@ -16,7 +16,8 @@ const validationSchema = Yup.object().shape({
         .length(4, 'OTP must be exactly 4 digits'),
 });
 
-const OtpScreen = ({ navigation }) => {
+const OtpScreen = ({ navigation, route }) => {
+    const { screen_name } = route.params;
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: { otp: '' },
         resolver: yupResolver(validationSchema),
@@ -24,7 +25,13 @@ const OtpScreen = ({ navigation }) => {
 
     const onSubmit = (data) => {
         console.log('OTP Submitted:', data);
-        navigation.navigate('ResetPassword')
+        if (screen_name == 'register_screen') {
+            navigation.navigate('MPin')
+
+        } else {
+
+            navigation.navigate('ResetPassword')
+        }
     };
 
     return (

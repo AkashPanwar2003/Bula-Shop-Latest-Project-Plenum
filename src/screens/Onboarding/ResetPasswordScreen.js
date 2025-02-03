@@ -18,6 +18,7 @@ import ImagePickerComponent from '../../components/ImagePicker';
 import { colors } from '../../constants/colors';
 import CustomInput from '../../components/Input';
 import { images } from '../../constants/images';
+import { getItemFromStorage } from '../../constants/helper';
 const { width, height } = Dimensions.get('window');
 // Validation Schema
 const resetSchema = Yup.object().shape({
@@ -39,15 +40,18 @@ const ResetPasswordScreen = ({ navigation }) => {
         resolver: yupResolver(resetSchema),
         defaultValues: {
             password: '',
-            confirmPassword: '',
         },
     });
 
-    const handleResetPassword = (data) => {
+    const handleResetPassword = async (data) => {
 
-        const formData = { ...data };
-        navigation.navigate('Login')
-        console.log('Signup Data:', formData);
+        if (data) {
+            const mobile_number = await getItemFromStorage('mobile_number');
+
+            const formData = { ...data, mobile_number };
+            navigation.navigate('Login')
+            console.log('Signup Data:', formData);
+        }
         // Handle signup logic here (e.g., send data to the server)
     };
     return (

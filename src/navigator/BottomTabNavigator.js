@@ -26,7 +26,7 @@ function MainNavigator() {
             }}>
             <Tab.Screen
                 options={{
-                    tabBarLabel: 'Home',
+                    tabBarLabel: 'Dashboard',
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunity name="home" color={color} size={26} />
                     ),
@@ -36,7 +36,7 @@ function MainNavigator() {
             />
             <Tab.Screen
                 options={{
-                    tabBarLabel: 'Product',
+                    tabBarLabel: 'Items',
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunity name="grid" color={color} size={26} />
                     ),
@@ -56,7 +56,7 @@ function MainNavigator() {
             />
             <Tab.Screen
                 options={{
-                    tabBarLabel: 'Orders',
+                    tabBarLabel: 'ORDERS',
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunity name="cart-arrow-down" color={color} size={26} />
                     ),
@@ -66,7 +66,7 @@ function MainNavigator() {
             />
             <Tab.Screen
                 options={{
-                    tabBarLabel: 'Suppliers',
+                    tabBarLabel: 'Parties',
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunity name="account-supervisor-circle" color={color} size={26} />
                     ),

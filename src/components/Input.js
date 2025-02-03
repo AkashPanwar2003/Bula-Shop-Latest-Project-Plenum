@@ -13,6 +13,7 @@ const CustomInput = ({
     keyboardType = 'default',
     secureTextEntry = false,
     style,
+    maxLength
 }) => {
     const [showPassword, setShowPassword] = useState(secureTextEntry);
     return (
@@ -31,6 +32,7 @@ const CustomInput = ({
                         secureTextEntry={showPassword}
                         outlineColor={colors.primary1}
                         activeOutlineColor={colors.primary1}
+                        maxLength={maxLength}
                         right={
                             secureTextEntry && (
                                 <TextInput.Icon
